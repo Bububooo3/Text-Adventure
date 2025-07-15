@@ -5,7 +5,7 @@ pcall(function() os.execute("cls") end)
 
 -- Libraries
 local decoration = require("libraries.decoration")
-local readwrite = require("libraries.readwrite")
+local readwrite = require("libraries.console")
 
 -- Handle display stuff
 local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration.SetAllground, decoration.SetURL
