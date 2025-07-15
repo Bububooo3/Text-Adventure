@@ -1,11 +1,22 @@
 -- CONFIGURED TO RUN IN WINDOWS COMMAND PROMPT
--- Runs in vscode (etc), looks better in cmd prompt
+-- Runs in vscode terminal (etc), looks best in cmd prompt
+
+pcall(function() os.execute("cls") end)
+
+-- Libraries
+local decoration = require("libraries.decoration")
+local readwrite = require("libraries.readwrite")
 
 -- Handle display stuff
-local colors = require("libraries.colors")
-local c, b, f, bf, url = colors.SetColor, colors.SetBackground, colors.SetForeground, colors.SetAllground, colors.SetURL
+local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration.SetAllground, decoration.SetURL
+
 
 -- f("green")
-print("Hi, my name is "..c("Richard", {"blink", "red", "underline"}).."!")
+print("Hi, my name is " .. c("Richard", "blink", "yellow", "underline") .. "!")
 print("hi")
-print("Go to: "..c(url("Lua.org", "https://lua.org"), {"blink"}))
+
+
+
+if response == "1" then
+    print("Go to: " .. c(url("Lua.org", "https://lua.org"), "cyan"))
+end

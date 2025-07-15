@@ -54,17 +54,13 @@ local colors_lib = {}
 local current_foreground, current_background = bg_keys.bright_white, bg_keys.black
 os.execute("color " .. current_background .. current_foreground)
 
-function colors_lib.SetColor(text, color_tbl)
+function colors_lib.SetColor(text, ...)
     local color = 0
-
-    if type(color_tbl) == "string" then
-        for i, v in pairs(keys) do if color_tbl == i then color = v end end
+    local color_tbl = table.pack(...)
+    
+    for _, color_txt in pairs(color_tbl) do
+        for i, v in pairs(keys) do if color_txt == i then color = v end end
         text = "\27[" .. color .. "m" .. text .. "\27[0m"
-    else
-        for _, color_txt in pairs(color_tbl) do
-            for i, v in pairs(keys) do if color_txt == i then color = v end end
-            text = "\27[" .. color .. "m" .. text .. "\27[0m"
-        end
     end
     return text
 end
