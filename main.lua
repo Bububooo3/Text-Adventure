@@ -5,7 +5,7 @@ pcall(function() os.execute("cls") end)
 
 -- Libraries
 local decoration = require("libraries.decoration")
-local readwrite = require("libraries.console")
+local console = require("libraries.console")
 
 -- Handle display stuff
 local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration.SetAllground, decoration.SetURL
@@ -15,8 +15,8 @@ local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decorati
 print("Hi, my name is " .. c("Richard", "blink", "yellow", "underline") .. "!")
 print("hi")
 
+local see_lua = console.Confirm("Would you like to learn more about the Lua programming language?")
 
-
-if response == "1" then
+if see_lua then
     print("Go to: " .. c(url("Lua.org", "https://lua.org"), "cyan"))
 end
