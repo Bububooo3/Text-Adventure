@@ -3,6 +3,42 @@ local decoration = require("libraries.decoration")
 local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration
     .SetAllground, decoration.SetURL
 
+function console.SetScene(path)
+    local scene = require(path)
+    scene.init()
+    return true
+end
+
+function console.Clear()
+    if not pcall(function() os.execute("cls") end) then
+        pcall(function() os.execute("clear") end)
+    end
+    return true
+end
+
+function console.Sleep(length)
+    local start = os.clock()
+    while (os.clock() - start) <= length do end
+    return true
+end
+
+function console.PrintBlank(num)
+    if not num then num = 1 end
+    for i = 0, num do print("") end
+    return true
+end
+
+function console.Scroll(length, lines)
+    if not (lines and length) then return end
+
+    local speed = length/lines
+
+    for i=0, lines do
+        console.Sleep(speed)
+        console.PrintBlank()
+    end
+end
+
 function console.Prompt(question, ...)
     if #... < 1 then return end
     local answers = table.pack(...)
@@ -28,6 +64,8 @@ function console.Prompt(question, ...)
         if not tonumber(response) then response = 0 end
         response = tonumber(response)
     end
+
+    print("\n" .. breaker .. "\n")
 
     return response
 end
