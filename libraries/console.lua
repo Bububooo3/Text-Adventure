@@ -1,5 +1,6 @@
 local console = {}
 local decoration = require("libraries.decoration")
+local constants = require("libraries.constants")
 local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration
     .SetAllground, decoration.SetURL
 
@@ -22,20 +23,73 @@ function console.Sleep(length)
     return true
 end
 
-function console.PrintBlank(num)
+function console.center(text)
+    local config = io.popen("mode con")
+    if not config then return text end
+
+    local mode_output = config:read("*a")
+    config:close()
+
+    local width = constants.width
+    for line in mode_output:gmatch("[^\r\n]+") do
+        if line:match("Columns:") then
+            width = tonumber(line:match("%d+"))
+            break
+        end
+
+        local padding = string.rep(" ", math.ceil((width - #text) / 2))
+
+        return padding .. text
+    end
+end
+
+function console.right(text)
+    local config = io.popen("mode con")
+    if not config then return text end
+
+    local mode_output = config:read("*a")
+    config:close()
+
+    local width = constants.width
+    for line in mode_output:gmatch("[^\r\n]+") do
+        if line:match("Columns:") then
+            width = tonumber(line:match("%d+"))
+            break
+        end
+
+        local padding = string.rep(" ", math.ceil((width - #text)))
+
+        return padding .. text
+    end
+end
+
+function console.truncate(text)
+    local width = constants.width
+    local truncatedString = ""
+
+    if #text > width then
+        truncatedString = string.sub(text, 1, width)
+    else
+        truncatedString = text
+    end
+
+    return truncatedString
+end
+
+function console.breakline(num)
     if not num then num = 1 end
     for i = 0, num do print("") end
     return true
 end
 
-function console.Scroll(length, lines)
-    if not (lines and length) then return end
+function console.Scroll(lines, length)
+    if not lines then return end
+    if not length then length = lines / 5 end
 
-    local speed = length/lines
-
-    for i=0, lines do
+    local speed = length / lines
+    for i = 0, lines do
+        console.breakline()
         console.Sleep(speed)
-        console.PrintBlank()
     end
 end
 
@@ -54,10 +108,10 @@ function console.Prompt(question, ...)
     end
     local breaker = "="
     for i = 1, math.ceil((string.len(text)) / 2) - 1 do breaker = breaker .. "-=" end
-    text = question .. text .. "\n\nEnter response: "
+    text = question .. console.center(text) .. "\n\nEnter response: "
 
     while response < 1 or response > #answers do
-        print("\n" .. breaker .. "\n")
+        print(console.truncate("\n" .. breaker .. "\n"))
 
         io.write(text)
         response = io.read()
@@ -65,7 +119,7 @@ function console.Prompt(question, ...)
         response = tonumber(response)
     end
 
-    print("\n" .. breaker .. "\n")
+    print(console.truncate("\n" .. breaker .. "\n"))
 
     return response
 end
