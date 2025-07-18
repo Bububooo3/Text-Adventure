@@ -93,12 +93,24 @@ function console.Scroll(lines, length)
     end
 end
 
-function console.Prompt(question, ...)
+function console.Print(...)
+    local msg = table.concat(table.pack(...))
+    local spaces = ""
+
+    for i=0, constants.width - string.len(msg) do
+        spaces = spaces.." "
+    end
+    
+
+    print(msg..spaces.."=")
+end
+
+function console.Prompt(question, redraw, ...)
     if #... < 1 then return end
     local answers = table.pack(...)
 
     local response = -1.0
-    local text = "\n\n|"
+    local text = "|"
 
     for i, v in ipairs(answers) do
         if string.lower(v) == "yes" then v = c(v, "green") elseif string.lower(v) == "no" then v = c(v, "red") end
@@ -108,15 +120,21 @@ function console.Prompt(question, ...)
     end
     local breaker = "="
     for i = 1, math.ceil((string.len(text)) / 2) - 1 do breaker = breaker .. "-=" end
-    text = question .. console.center(text) .. "\n\nEnter response: "
+    print(console.center("hi"))
+    print(console.center(text))
+    text = question .. "\n\n" .. console.center(text) .. "\n\nEnter response: "
 
     while response < 1 or response > #answers do
         print(console.truncate("\n" .. breaker .. "\n"))
 
         io.write(text)
         response = io.read()
-        if not tonumber(response) then response = 0 end
+        if not tonumber(response) then response = "0" end
         response = tonumber(response)
+        
+        if redraw and response < 1 or response > #answers then
+            console.Clear(); redraw();
+        end
     end
 
     print(console.truncate("\n" .. breaker .. "\n"))

@@ -9,11 +9,18 @@ local constants = require("libraries.constants")
 local c, b, f, bf, url = decoration.SetColor, decoration.SetBackground, decoration.SetForeground, decoration
     .SetAllground, decoration.SetURL
 
-function main_menu.init()
-    print(console.center(c(constants.title_art, "yellow", "blink")))
+function main_menu.refresh()
+    console.Clear()
+    print(c(constants.title_art, "yellow", "blink"))
 
+    print("\n"..console.center(constants.tooltips[math.random(1, #constants.tooltips)]))
+end
+
+function main_menu.init()
+    console.Clear()
+    print("\n"..c(constants.title_art, "yellow", "blink").."\n")
     print(console.center(constants.tooltips[math.random(1, #constants.tooltips)]))
-    console.Prompt("", "Play", "Settings", "Help", "Credits")
+    console.Prompt("", main_menu.refresh, "Play", "Settings", "Help", "Credits")
 end
 
 return main_menu
