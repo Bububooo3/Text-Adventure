@@ -8,6 +8,8 @@ local constants = {
            YP   YP  `Y88P'     YP    Y88888P Y888888P VP   V8P Y88888P
 ]],
 
+    title_color = "cyan",
+
     width = 80,
 
     tooltips = {

@@ -37,7 +37,10 @@ function console.center(text)
             break
         end
 
-        local padding = string.rep(" ", math.ceil((width - #text) / 2))
+        local calc = width - #text
+        if calc < 0 then calc = width/4 end
+
+        local padding = string.rep(" ", math.ceil(calc / 2))
 
         return padding .. text
     end
@@ -57,7 +60,10 @@ function console.right(text)
             break
         end
 
-        local padding = string.rep(" ", math.ceil((width - #text)))
+        local calc = width - #text
+        if calc < 0 then calc = width/4 end
+
+        local padding = string.rep(" ", math.ceil(calc))
 
         return padding .. text
     end
@@ -120,8 +126,6 @@ function console.Prompt(question, redraw, ...)
     end
     local breaker = "="
     for i = 1, math.ceil((string.len(text)) / 2) - 1 do breaker = breaker .. "-=" end
-    print(console.center("hi"))
-    print(console.center(text))
     text = question .. "\n\n" .. console.center(text) .. "\n\nEnter response: "
 
     while response < 1 or response > #answers do
