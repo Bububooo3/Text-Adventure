@@ -12,7 +12,7 @@ end
 
 function console.Clear()
     if not pcall(function() os.execute("cls") end) then
-        pcall(function() os.execute("clear") end)
+        if not pcall(function() os.execute("clear") end) then error("A problem occured while executing the 'clear' command") end
     end
     return true
 end
